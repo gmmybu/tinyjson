@@ -11,6 +11,6 @@ Input and output are ansi or utf8 string; but JObject use unicode string.
 
 Not support obj[L"xx"] = 8; but obj.Insert(L"xx", 8);
 
-if you find bugs or can improve it, please emal to me: fenix124@163.com
+if you find bugs or have suggestions, please email me: fenix124@163.com
 
 
