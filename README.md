@@ -20,5 +20,5 @@ int x = obj[L"xx"]; //but xx not exists.
 
 if you find bugs or can improve it, please emal to me: fenix124@163.com
 
-
+1
 
