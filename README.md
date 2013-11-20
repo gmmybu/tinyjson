@@ -1,6 +1,6 @@
 tinyjson
 ========
-similar to jsoncpp.
+similar to jsoncpp. https://github.com/rboulton/jsoncpp
 
 sample:
 JObject obj = JObject::Deserialize("{\"a\":5, \"b\":[8, \"x\"]}");
