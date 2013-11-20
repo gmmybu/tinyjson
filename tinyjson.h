@@ -118,22 +118,32 @@ namespace Json {
         }
 
         JObject& operator=(const wstring& text) {
-            _data->DecReference();
-            _data = AllocString();
+            if (_data->_ref != 1 || _data->_type != jstring) {
+                _data->DecReference();
+                _data = AllocString();
+            }
             *_data->_string = text;
             return *this;
         }
 
         JObject& operator=(double number) {
-            _data->DecReference();
-            _data = AllocNormal(jnumber);
+            if (_data->_ref == 1 && _data->_type <= jboolean) {
+                _data->_type = jnumber;
+            } else {
+                _data->DecReference();
+                _data = AllocNormal(jnumber);
+            }
             _data->_number = number;
             return *this;
         }
 
         JObject& operator=(JBoolean jbool) {
-            _data->DecReference();
-            _data = AllocNormal(jboolean);
+            if (_data->_ref == 1 && _data->_type <= jboolean) {
+                _data->_type = jboolean;
+            } else {
+                _data->DecReference();
+                _data = AllocNormal(jboolean);
+            }
             _data->_boolean = jbool == jtrue ? true : false;
             return *this;
         }
@@ -251,7 +261,7 @@ namespace Json {
             return _data->_boolean;
         }
     protected:
-        class JObjectImplBase;
+        class  JObjectImplBase;
         static JObjectImplBase* AllocNormal(JType type) { return new JObjectImplBase(type); }
         static JObjectImplBase* AllocObject()           { return new JObjectImplObject;     }
         static JObjectImplBase* AllocArray()            { return new JObjectImplArray;      }
@@ -327,6 +337,11 @@ namespace Json {
         inline bool IsNull()      const { return GetType() == jnull; }
         inline bool IsBoolean()   const { return GetType() == jboolean; }
     public:
+        static JObject& Null() {
+            static JObject _null;
+            return _null;
+        }
+
         static string Serialize(const JObject& obj) {
             string text;
             text.reserve(1000000); //bigjson accelerator
