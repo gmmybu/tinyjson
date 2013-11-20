@@ -9,7 +9,6 @@ namespace Json {
     enum JType {
         jnull, jnumber, jboolean,
         jobject, jarray, jstring,
-        undefined,
     };
     const wstring JName[] = {
         L"null", L"number", L"boolean",
