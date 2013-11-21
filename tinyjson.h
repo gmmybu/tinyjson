@@ -412,30 +412,30 @@ namespace Json {
                     ch == L'\f' || ch == L'\n' ||
                     ch == L'\r' || ch == L'\t')
                 {
-                    data.append(1, '\\');
-                    data.append(1, (char)ch);
+                    data += '\\';
+                    data += (char)ch;
                 } else if (ch < 32 || ch > 126) {
-                    data.append("\\u");
-                    data.append(1, ToHex(ch>>12));
-                    data.append(1, ToHex((ch>>8)&15));
-                    data.append(1, ToHex((ch>>4)&15));
-                    data.append(1, ToHex(ch&15));
+                    data += "\\u";
+                    data += ToHex(ch>>12);
+                    data += ToHex((ch>>8)&15);
+                    data += ToHex((ch>>4)&15);
+                    data += ToHex(ch&15);
                 } else {
-                    data.append(1, (char)ch);
+                    data += (char)ch;
                 }
             }
         }
 
         static void SerializeString(string& text, const JObject& obj) {
-            text.append("\"");
+            text += "\"";
             ConvertString(text, obj.ToString());
-            text.append("\"");
+            text += "\"";
         }
 
         static void SerializeNumber(string& text, const JObject& obj) {
             char buff[32];
             sprintf_s(buff, 30, "%g", obj.ToNumber());
-            text.append(buff);
+            text += buff;
         }
 
         static void Forward(const string& text, size_t& pos) {
@@ -473,7 +473,7 @@ namespace Json {
                         text[pos + 3] == 'e')
                     {
                         pos += 5;
-                        return JObject(jtrue);
+                        return JObject(jfalse);
                     }
                     throw JParseException(pos);
                 }
@@ -485,7 +485,7 @@ namespace Json {
                         text[pos + 3] == 'l')
                     {
                         pos += 4;
-                        return JObject(jtrue);
+                        return Null();
                     }
                     throw JParseException(pos);
                 }
@@ -583,6 +583,7 @@ namespace Json {
             pos = cursor;
             return number;
         }
+        
         static wchar_t GetUnicode(const string& data, size_t pos) {
             int a, b, c, d;
             if ((a = JHexToDec[data[pos]]) == -1 ||
